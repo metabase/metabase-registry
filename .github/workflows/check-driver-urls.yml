@@ -62,7 +62,7 @@ jobs:
       with:
         script: | # js
           const fetch = require('node-fetch');
-          const urls = ${{ steps.drivers_registry_urls.outputs.result }};
+          const urls = JSON.parse(`${{ steps.drivers_registry_urls.outputs.result }}`);
           const failedUrls = [];
 
           const urlChecks = urls.map(({ description, url }) => {
