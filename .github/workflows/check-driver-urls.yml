@@ -63,7 +63,7 @@ jobs:
           const urls = JSON.parse(`${{ steps.drivers_registry_urls.outputs.result }}`);
           const failedUrls = [];
 
-          const urlChecks = await Promise.all(urls.map(({ description, url }) => {
+          await Promise.all(urls.map(({ description, url }) => {
             return fetch(url)
               .then((response) => {
                 if (!response.ok) {
