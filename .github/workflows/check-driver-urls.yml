@@ -64,6 +64,7 @@ jobs:
           const failedUrls = [];
 
           for (const { description, url } of urls) {
+            console.log(`Checking ${description}`);
             await fetch(url)
               .then((response) => {
                 if (!response.ok) {
