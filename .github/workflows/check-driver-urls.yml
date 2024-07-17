@@ -58,29 +58,31 @@ jobs:
           return urls;
 
     - name: check urls
-      run: | # js
-        const fetch = require('node-fetch');
-        const urls = JSON.parse("${{ steps.drivers_registry_urls.outputs.result }}");
-        const failedUrls = [];
+      uses: actions/github-script@v7
+      with:
+        script: | # js
+          const fetch = require('node-fetch');
+          const urls = JSON.parse("${{ steps.drivers_registry_urls.outputs.result }}");
+          const failedUrls = [];
 
-        const urlChecks = urls.map(({ description, url }) => {
-          return fetch(url)
-            .then((response) => {
-              if (!response.ok) {
-                console.log(`❌  Failed to fetch ${description}`);
+          const urlChecks = urls.map(({ description, url }) => {
+            return fetch(url)
+              .then((response) => {
+                if (!response.ok) {
+                  console.log(`❌  Failed to fetch ${description}`);
+                  failedUrls.push({ description, url });
+                } else {
+                  console.log(`✅  Successfully fetched ${description}`);
+                }
+              }).catch((error) => {
+                console.log(`❌  Failed to fetch ${description}: ${error}`);
                 failedUrls.push({ description, url });
-              } else {
-                console.log(`✅  Successfully fetched ${description}`);
-              }
-            }).catch((error) => {
-              console.log(`❌  Failed to fetch ${description}: ${error}`);
-              failedUrls.push({ description, url });
-            });
-        });
+              });
+          });
 
-        await Promise.all(urlChecks);
+          await Promise.all(urlChecks);
 
-        if (failedUrls.length > 0) {
-          console.log('Failed urls:', failedUrls);
-          process.exit(1);
-        }
+          if (failedUrls.length > 0) {
+            console.log('Failed urls:', failedUrls);
+            process.exit(1);
+          }
