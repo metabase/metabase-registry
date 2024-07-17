@@ -7,9 +7,9 @@ on:
       - main
 
 jobs:
-  build:
+  check-urls:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -63,8 +63,8 @@ jobs:
           const urls = JSON.parse(`${{ steps.drivers_registry_urls.outputs.result }}`);
           const failedUrls = [];
 
-          const urlChecks = urls.map(({ description, url }) => {
-            return fetch(url)
+          for (const { description, url } of urls) {
+            await fetch(url)
               .then((response) => {
                 if (!response.ok) {
                   console.log(`❌  Failed to fetch ${description}`);
@@ -76,9 +76,7 @@ jobs:
                 console.log(`❌  Failed to fetch ${description}: ${error}`);
                 failedUrls.push({ description, url });
               });
-          });
-
-          await Promise.all(urlChecks);
+          }
 
           if (failedUrls.length > 0) {
             console.log('Failed urls:', failedUrls);
