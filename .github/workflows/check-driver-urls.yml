@@ -63,6 +63,8 @@ jobs:
           const urls = JSON.parse(`${{ steps.drivers_registry_urls.outputs.result }}`);
           const failedUrls = [];
 
+          console.log('Checking urls:', urls);
+
           for (const { description, url } of urls) {
             console.log(`Checking ${description}`);
             await fetch(url)
@@ -83,3 +85,7 @@ jobs:
             console.log('Failed urls:', failedUrls);
             process.exit(1);
           }
+
+          console.log(`\n\n✅  Successfully fetched all urls`);
+          process.exit(0);
+
