@@ -7,7 +7,7 @@ drivers:
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
     versions:
-      default: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/0.2.8/duckdb.metabase-driver.jar
+      default: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/0.2.9/duckdb.metabase-driver.jar
       49: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/0.2.7/duckdb.metabase-driver.jar
   - name: exasol
     homepage: https://github.com/exasol/metabase-driver
@@ -22,7 +22,7 @@ drivers:
   - name: materialize
     homepage: https://github.com/MaterializeInc/metabase-materialize-driver
     versions:
-      default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.1.0/materialize.metabase-driver.jar
+      default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.0/materialize.metabase-driver.jar
   - name: ocient
     homepage: https://github.com/Xeograph/metabase-ocient-driver
     versions:
