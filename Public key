@@ -1,0 +1,52 @@
+
+
+``` Htlm
+Encryption Policy
+
+Keywords: Encryption key management
+
+Purpose
+
+This policy defines organizational requirements for the use of cryptographic controls, as well as the requirements for cryptographie keys, in order to protect the confidentiality, integrity, authenticity, and nonrepudiation of information.
+
+Scope
+
+This policy applies to all systems, equipment, facilities and information within the scope of Metabase's information security program. All employees, contractors, part-time, and temporary workers, service providers, and those employed by others to perform work on behalf of the organization having to do with cryptographic systems, algorithms, or keying material are subject to this policy and must comply with it
+
+Background
+
+This policy defines the high level objectives and implementation instructions for Metabase's use of cryptographic algorithms and keys. It is vital that the organization adopt a standard approach to cryptographic controls across all work centers in order to ensure end-to-end security, while also promoting interoperability. This document defines the specific algorithms approved for use, requirements for key management and protection, and requirements for using cryptography in cloud environments
+
+Policy
+
+Cryptography Controls
+
+Metabase must protect individual systems or information by means of cryptographic controls as defined in Table 3
+
+Table 3: Cryptographic Controls
+
+Name of System/Type of Information
+
+Cryptographic Tool
+
+Encryption Algorithm
+
+Key Size
+
+Public Key Infrastructure for Authentication
+
+OpenSSL
+
+AES-256
+
+256-bit key
+
+Data Eneryption Keys
+
+OpenSSL
+
+AES-256
+
+256-bit key 
+
+```
