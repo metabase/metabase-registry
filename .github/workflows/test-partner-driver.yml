@@ -10,5 +10,5 @@ jobs:
     steps:
       - name: Test Athena driver
         uses: ./.github/actions/test-partner
-      with:
-        DRIVER: 'clickhouse'
+        with:
+          DRIVER: 'clickhouse'
