@@ -1,0 +1,14 @@
+name: Test Partner Driver
+
+on:
+  schedule:
+    - cron:  '30 * * * *'
+
+jobs:
+  clickhouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Athena driver
+        uses: ./.github/actions/test-partner
+      with:
+        DRIVER: 'clickhouse'
