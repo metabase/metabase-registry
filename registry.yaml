@@ -4,6 +4,9 @@ drivers:
     versions:
       default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.50.6/clickhouse.metabase-driver.jar
       49: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.5.1/clickhouse.metabase-driver.jar
+    git:
+      default:
+        url: https://github.com/ClickHouse/metabase-clickhouse-driver.git
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
     versions:

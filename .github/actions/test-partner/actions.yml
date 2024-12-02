@@ -1,0 +1,13 @@
+name: 'Test Partner Driver'
+description: 'Runs test against metabase'
+inputs:
+  DRIVER:
+    description: 'Driver to use'
+    required: true
+runs:
+  using: 'docker'
+  image: 'tester/Dockerfile'
+  env:
+    DRIVER: ${{ inputs.DRIVER }}
+    OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
