@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -x
 set -v
+cp registry.yaml /usr/local/metabase
+cd /usr/local/metabase
 git config --global --add safe.directory $PWD
 
 echo DRIVER IS $DRIVER
