@@ -9,5 +9,4 @@ runs:
   image: 'tester/Dockerfile'
   env:
     DRIVER: ${{ inputs.DRIVER }}
-    OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-
+    OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.OP_SERVICE_ACCOUNT_TOKEN }}

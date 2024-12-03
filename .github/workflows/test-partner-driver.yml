@@ -11,3 +11,4 @@ jobs:
         uses: ./.github/actions/test-partner
         with:
           DRIVER: 'clickhouse'
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
