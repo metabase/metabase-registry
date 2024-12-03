@@ -4,6 +4,9 @@ inputs:
   DRIVER:
     description: 'Driver to use'
     required: true
+  OP_SERVICE_ACCOUNT_TOKEN:
+    description: '1Password service account token'
+    required: true
 runs:
   using: 'docker'
   image: '/tester/Dockerfile'
