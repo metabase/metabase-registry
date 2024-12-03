@@ -18,6 +18,9 @@ source driver.env
 set +a
 
 cd metabase
+git checkout master
+git pull > /dev/null
+git status
 ls
 ls modules/drivers/
 
