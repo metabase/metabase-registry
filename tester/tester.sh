@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+set -x
+set -v
+git config --global --add safe.directory $PWD
 
 echo DRIVER IS $DRIVER
 pwd
@@ -15,10 +18,9 @@ source driver.env
 set +a
 
 cd metabase
+ls
+ls modules/drivers/
 
-git checkout master
-git pull > /dev/null
-git status
 DRIVERS=$DRIVER clojure  \
   -Sdeps "{:jvm-opts [\"-Dci=true\" \"-Xmx4g\" \"-Xms4g\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${DRIVER}/test\" \"modules/driver/${DRIVER}/src\"] :extra-deps {metabase/${DRIVER} {:local/root \"modules/drivers/${DRIVER}\"}}}}}" \
   -X:dev:ee:ee-dev:drivers:drivers-dev:partner-driver:test \
