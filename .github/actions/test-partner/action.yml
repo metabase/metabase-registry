@@ -9,7 +9,7 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: '/tester/Dockerfile'
+  image: '../../../tester/Dockerfile'
   env:
     DRIVER: ${{ inputs.DRIVER }}
     OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.OP_SERVICE_ACCOUNT_TOKEN }}
