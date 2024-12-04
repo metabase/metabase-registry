@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: 'master'
-      PARTNER_REF: 'master'
+      PARTNER_REF: 'main'
       DRIVER: 'starburst'
       REPO: starburstdata/metabase-driver
       DOCKER: false
