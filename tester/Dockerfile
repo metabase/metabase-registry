@@ -3,7 +3,6 @@ FROM ubuntu:latest
 WORKDIR /usr/local/metabase
 RUN apt-get -qq -y update
 RUN apt-get -qq -y install openjdk-21-jdk git yq curl
-RUN git clone https://github.com/metabase/metabase.git
 ENV DRIVER=
 
 RUN apt install -y ca-certificates curl gnupg &&\
@@ -17,9 +16,6 @@ RUN apt install -y ca-certificates curl gnupg &&\
 RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/posix-install.sh &&\
     chmod +x posix-install.sh &&\
     ./posix-install.sh
-
-RUN cd metabase &&\
-    yarn build-static-viz
 
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
   gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \

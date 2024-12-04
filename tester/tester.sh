@@ -3,6 +3,8 @@ set -x
 set -v
 cp registry.yaml /usr/local/metabase
 cd /usr/local/metabase
+
+git clone https://github.com/metabase/metabase.git
 git config --global --add safe.directory $PWD
 
 echo DRIVER IS $DRIVER
@@ -23,6 +25,9 @@ cd metabase
 git checkout master
 git pull > /dev/null
 git status
+
+yarn build-static-viz
+
 ls
 ls modules/drivers/
 

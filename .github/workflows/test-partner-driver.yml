@@ -6,9 +6,21 @@ jobs:
   clickhouse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Test Athena driver
+      - name: Test Driver
         uses: ./.github/actions/test-partner
         with:
           DRIVER: 'clickhouse'
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          MB_VERSION: 'master'
+          REPO: ClickHouse/metabase-clickhouse-driver
+
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Driver
+        uses: ./.github/actions/test-partner
+        with:
+          DRIVER: 'materialize'
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          MB_VERSION: 'master'
+          REPO: MaterializeInc/metabase-materialize-driver
