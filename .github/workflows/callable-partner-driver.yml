@@ -82,3 +82,14 @@ jobs:
             -X:dev:drivers:drivers-dev:test:partner-driver \
             :only-tags [:mb/driver-tests] \
             :only 'metabase.driver.sql-jdbc-test'
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: failure()
+        with:
+          path: "metabase/target/junit/**/*_test.xml"
+          name: JUnit Test Report ${{ inputs.DRIVER }}
+          reporter: java-junit
+          list-suites: failed
+          list-tests: failed
+          fail-on-error: false
