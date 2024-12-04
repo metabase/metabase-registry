@@ -5,12 +5,15 @@ on:
     inputs:
       DRIVER:
         description: 'Driver to use'
+        type: string
         required: true
       MB_VERSION:
+        type: string
         required: true
       REPO:
+        type: string
         required: true
-    secrets: inherit
+
 jobs:
   main:
     runs-on: ubuntu-latest
