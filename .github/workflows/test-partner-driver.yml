@@ -1,32 +1,18 @@
-name: Test Partner Driver
+name: Test All Partner Drivers
 
 on: push
 
 jobs:
   clickhouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          path: registry
-      - name: Test Driver
-        uses: registry/.github/actions/test-partner
-        with:
-          DRIVER: 'clickhouse'
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          MB_VERSION: 'master'
-          REPO: ClickHouse/metabase-clickhouse-driver
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_VERSION: 'master'
+      DRIVER: 'clickhouse'
+      REPO: ClickHouse/metabase-clickhouse-driver
 
   materialize:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          path: registry
-      - name: Test Driver
-        uses: registry/.github/actions/test-partner
-        with:
-          DRIVER: 'materialize'
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          MB_VERSION: 'master'
-          REPO: MaterializeInc/metabase-materialize-driver
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_VERSION: 'master'
+      DRIVER: 'materialize'
+      REPO: MaterializeInc/metabase-materialize-driver
