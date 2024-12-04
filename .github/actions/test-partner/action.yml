@@ -20,11 +20,6 @@ runs:
         repository: metabase/metabase
         ref: MB_VERSION
 
-    - name: Checkout Metabase Registry Repo
-      uses: actions/checkout@v3
-      with:
-        path: registry
-
     - name: Checkout Driver Repo
       uses: actions/checkout@v3
       with:

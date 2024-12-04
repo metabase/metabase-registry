@@ -6,8 +6,12 @@ jobs:
   clickhouse:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Metabase Registry Repo
+        uses: actions/checkout@v3
+        with:
+          path: registry
       - name: Test Driver
-        uses: ./.github/actions/test-partner
+        uses: registry/.github/actions/test-partner
         with:
           DRIVER: 'clickhouse'
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
@@ -17,8 +21,12 @@ jobs:
   materialize:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Metabase Registry Repo
+        uses: actions/checkout@v3
+        with:
+          path: registry
       - name: Test Driver
-        uses: ./.github/actions/test-partner
+        uses: registry/.github/actions/test-partner
         with:
           DRIVER: 'materialize'
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
