@@ -80,8 +80,7 @@ jobs:
             clojure \
             -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/partner-driver/test\" \"modules/driver/partner-driver/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/partner-driver\"}}}}}" \
             -X:dev:drivers:drivers-dev:test:partner-driver \
-            :only-tags [:mb/driver-tests] \
-            :only 'metabase.driver.sql-jdbc-test'
+            :only-tags [:mb/driver-tests]
 
       - name: Publish Test Report
         uses: dorny/test-reporter@v1
