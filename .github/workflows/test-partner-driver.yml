@@ -6,8 +6,7 @@ jobs:
   clickhouse:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Metabase Registry Repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: registry
       - name: Test Driver
@@ -21,8 +20,7 @@ jobs:
   materialize:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Metabase Registry Repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: registry
       - name: Test Driver

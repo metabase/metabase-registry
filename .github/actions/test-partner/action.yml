@@ -15,13 +15,13 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout Metabase Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: metabase/metabase
         ref: MB_VERSION
 
     - name: Checkout Driver Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: ${{ inputs.REPO }}
         path: modules/drivers/partner-driver
