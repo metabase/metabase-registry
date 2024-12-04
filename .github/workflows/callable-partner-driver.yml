@@ -35,7 +35,7 @@ jobs:
         with:
           repository: ${{ inputs.REPO }}
           path: modules/drivers/partner-driver
-      - run: pwd && ls
+      - run: pwd && ls ../registry
       - name: Set up JDK 21
         uses: actions/setup-java@v2
         with:
@@ -45,7 +45,7 @@ jobs:
       - name: Start Database in Docker
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          compose-file: "registry/docker-compose.yml"
+          compose-file: "./registry/docker-compose.yml"
           services: |
             ${{ inputs.DRIVER }}
 
