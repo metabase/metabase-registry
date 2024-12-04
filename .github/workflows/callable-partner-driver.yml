@@ -1,5 +1,4 @@
 name: Test Partner Driver
-name: 'Test Partner Driver'
 
 on:
   workflow_call:
