@@ -99,8 +99,9 @@ jobs:
         uses: dorny/test-reporter@v1
         if: failure()
         with:
-          path: "metabase/target/junit/**/*_test.xml"
+          path: "target/junit/**/*_test.xml"
           name: JUnit Test Report ${{ inputs.DRIVER }}
+          working-directory: metabase
           reporter: java-junit
           list-suites: failed
           list-tests: failed
