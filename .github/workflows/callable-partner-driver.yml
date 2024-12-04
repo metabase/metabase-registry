@@ -87,6 +87,8 @@ jobs:
 
           sudo echo "127.0.0.1 ${{ inputs.DRIVER }}" | sudo tee -a /etc/hosts
 
+          echo ${{ inputs.DOCKER }}
+
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
             -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/partner-driver/test\" \"modules/driver/partner-driver/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/partner-driver\"}}}}}" \
