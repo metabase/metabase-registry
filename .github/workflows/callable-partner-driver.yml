@@ -7,11 +7,17 @@ on:
         description: 'Driver to use'
         type: string
         required: true
-      MB_VERSION:
+      MB_REF:
+        type: string
+        required: true
+      PARTNER_REF:
         type: string
         required: true
       REPO:
         type: string
+        required: true
+      DOCKER:
+        type: boolean
         required: true
 
 jobs:
@@ -21,20 +27,24 @@ jobs:
       run:
         working-directory: ./metabase
     steps:
+      - uses: actions/checkout@v4
+        with:
+          path: registry
+
       - name: Checkout Metabase Repo
         uses: actions/checkout@v4
         with:
           path: metabase
           repository: metabase/metabase
-          ref: ${{ inputs.MB_VERSION }}
-      - uses: actions/checkout@v4
-        with:
-          path: registry
+          ref: ${{ inputs.MB_REF }}
+
       - name: Checkout Driver Repo
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.REPO }}
           path: metabase/modules/drivers/partner-driver
+          ref: ${{ inputs.PARTNER_REF }}
+
       - name: Set up JDK 21
         uses: actions/setup-java@v2
         with:
@@ -42,6 +52,7 @@ jobs:
           java-version: 21
 
       - name: Start Database in Docker
+        if: ${{ inputs.DOCKER }}
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           compose-file: "./registry/docker-compose.yml"

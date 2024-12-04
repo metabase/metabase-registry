@@ -6,13 +6,33 @@ jobs:
   clickhouse:
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
-      MB_VERSION: 'master'
+      MB_REF: 'master'
+      PARTNER_REF: 'master'
       DRIVER: 'clickhouse'
       REPO: ClickHouse/metabase-clickhouse-driver
+      DOCKER: true
 
   materialize:
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
-      MB_VERSION: 'master'
+      MB_REF: 'master'
+      PARTNER_REF: 'master'
       DRIVER: 'materialize'
       REPO: MaterializeInc/metabase-materialize-driver
+      DOCKER: true
+
+  ocient:
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: 'master'
+      PARTNER_REF: 'master'
+      DRIVER: 'ocient'
+      REPO: Xeograph/metabase-ocient-driver
+
+  starburst:
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: 'master'
+      PARTNER_REF: 'master'
+      DRIVER: 'starburst'
+      REPO: starburstdata/metabase-driver
