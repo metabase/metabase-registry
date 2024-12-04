@@ -28,6 +28,7 @@ jobs:
       PARTNER_REF: 'master'
       DRIVER: 'ocient'
       REPO: Xeograph/metabase-ocient-driver
+      DOCKER: false
 
   starburst:
     uses: ./.github/workflows/callable-partner-driver.yml
@@ -36,3 +37,4 @@ jobs:
       PARTNER_REF: 'master'
       DRIVER: 'starburst'
       REPO: starburstdata/metabase-driver
+      DOCKER: false
