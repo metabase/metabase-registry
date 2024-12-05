@@ -15,7 +15,7 @@ jobs:
       - id: drivers
         run: |
           export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
-          echo value=$(yq ".drivers | map({\"name\": .name:, \"repo\": .test.repo\
+          echo value=$(yq ".drivers | map({\"name\": .name, \"repo\": .test.repo\
              , \"edge\": .test.refs.default\
              , \"current\": (.test.refs | omit([\"default\"]) | to_entries| .[] | select((.key|tonumber) >= $CURRENT_VERSION) | .value)//.test.refs.default\
              , \"previous\": (.test.refs | omit([\"default\"]) | to_entries| .[] | select((.key|tonumber) >= $(($CURRENT_VERSION - 1))) | .value)//.test.refs.default\
