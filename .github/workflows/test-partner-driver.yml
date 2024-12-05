@@ -3,10 +3,28 @@ name: Test All Partner Drivers
 on: push
 
 jobs:
-  clickhouse:
+  clickhouse-edge:
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: 'master'
+      PARTNER_REF: 'master'
+      DRIVER: 'clickhouse'
+      REPO: ClickHouse/metabase-clickhouse-driver
+      DOCKER: true
+
+  clickhouse-current:
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: 'release-x.52.x'
+      PARTNER_REF: 'master'
+      DRIVER: 'clickhouse'
+      REPO: ClickHouse/metabase-clickhouse-driver
+      DOCKER: true
+
+  clickhouse-previous:
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: 'release-x.51.x'
       PARTNER_REF: 'master'
       DRIVER: 'clickhouse'
       REPO: ClickHouse/metabase-clickhouse-driver
