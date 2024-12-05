@@ -34,13 +34,13 @@ jobs:
     name: "${{ matrix.driver.name }} : ${{ matrix.version.name }} "
     strategy:
       matrix:
-        version: ${{fromJSON(needs.setup.outputs.versions)}}
         driver: ${{fromJSON(needs.setup.outputs.drivers)}}
+        version: ${{fromJSON(needs.setup.outputs.versions)}}
       fail-fast: false
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: ${{ matrix.version.ref }}
-      PARTNER_REF: ${{ matrix.driver.edge }}
+      PARTNER_REF: ${{ matrix.driver[matrix.version.name] }}
       DRIVER: ${{ matrix.driver.name }}
       REPO: ${{ matrix.driver.repo }}
       DOCKER: ${{ matrix.driver.docker }}
