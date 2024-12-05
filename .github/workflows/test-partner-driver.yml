@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install yq
-        run: sudo apt-get install -y yq
+        run: sudo snap install yq
       - id: drivers
         run: |
           export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
