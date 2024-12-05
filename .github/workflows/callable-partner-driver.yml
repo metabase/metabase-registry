@@ -22,6 +22,7 @@ on:
 
 jobs:
   main:
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     defaults:
       run:
