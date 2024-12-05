@@ -27,3 +27,13 @@ services:
     ports:
       - 8123:8123
       - 9000:9000
+  exasol:
+    image: exasol/docker-db:7.1.23
+    ports:
+      - 8563:8563
+      - 2580:2580
+      - 443:443
+  starburst:
+    image: trinodb/trino:latest
+    ports:
+      - 8082:8080
