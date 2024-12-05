@@ -3,35 +3,32 @@ name: Test All Partner Drivers
 on: push
 
 jobs:
-  clickhouse-edge:
-    name: edge
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - id: matrix
+        run: |
+          export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
+          echo "value=[\"master\", \"release-x.${CURRENT_VERSION}.x\", \"$(($CURRENT_VERSION - 1))\"]" >> $GITHUB_OUTPUT
+      - run: |
+          echo "${{ steps.matrix.outputs.value }}"
+
+  clickhouse:
+    needs: [ setup ]
+    name: ${{ matrix.value }}
+    strategy:
+      matrix:
+        value: ${{fromJSON(needs.setup.outputs.matrix)}}
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
-      MB_REF: 'master'
+      MB_REF: ${{ matrix.value }}
       PARTNER_REF: 'master'
       DRIVER: 'clickhouse'
       REPO: ClickHouse/metabase-clickhouse-driver
       DOCKER: true
 
-  clickhouse-current:
-    name: current
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'release-x.${{ vars.CURRENT_VERSION }}.x'
-      PARTNER_REF: 'master'
-      DRIVER: 'clickhouse'
-      REPO: ClickHouse/metabase-clickhouse-driver
-      DOCKER: true
-
-  clickhouse-previous:
-    name: previous
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'release-x.${{ vars.CURRENT_VERSION - 1 }}.x'
-      PARTNER_REF: 'master'
-      DRIVER: 'clickhouse'
-      REPO: ClickHouse/metabase-clickhouse-driver
-      DOCKER: true
 
   materialize:
     uses: ./.github/workflows/callable-partner-driver.yml
