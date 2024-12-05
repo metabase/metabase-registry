@@ -17,7 +17,7 @@ jobs:
 
   driver:
     needs: [ setup ]
-    name: ${{ matrix.driver.name }} : ${{ matrix.value }} :: ${{ matrix.driver.ref }}
+    name: "${{ matrix.driver.name }} : ${{ matrix.value }} :: ${{ matrix.driver.ref }}"
     strategy:
       matrix:
         value: ${{fromJSON(needs.setup.outputs.matrix)}}
