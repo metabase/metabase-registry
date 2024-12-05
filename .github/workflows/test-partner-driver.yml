@@ -11,48 +11,38 @@ jobs:
       - id: matrix
         run: |
           export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
-          echo "value=[\"master\", \"release-x.${CURRENT_VERSION}.x\", \"$(($CURRENT_VERSION - 1))\"]" >> $GITHUB_OUTPUT
+          echo "value=[\"master\", \"release-x.${CURRENT_VERSION}.x\", \"release-x.$(($CURRENT_VERSION - 1)).x\"]" >> $GITHUB_OUTPUT
       - run: |
           echo "${{ steps.matrix.outputs.value }}"
 
-  clickhouse:
+  driver:
     needs: [ setup ]
-    name: ${{ matrix.value }}
+    name: ${{ matrix.driver.name }} : ${{ matrix.value }} :: ${{ matrix.driver.ref }}
     strategy:
       matrix:
         value: ${{fromJSON(needs.setup.outputs.matrix)}}
+        driver:
+          - name: clickhouse
+            repo: ClickHouse/metabase-clickhouse-driver
+            ref: master
+            docker: true
+          - name: materialize
+            repo: MaterializeInc/metabase-materialize-driver
+            ref: master
+            docker: true
+          - name: starburst
+            repo: starburstdata/metabase-driver
+            ref: main
+            docker: false
+          - name: ocient
+            repo: Xeograph/metabase-ocient-driver
+            ref: master
+            docker: false
+      fail-fast: false
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: ${{ matrix.value }}
-      PARTNER_REF: 'master'
-      DRIVER: 'clickhouse'
-      REPO: ClickHouse/metabase-clickhouse-driver
-      DOCKER: true
-
-
-  materialize:
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'master'
-      PARTNER_REF: 'master'
-      DRIVER: 'materialize'
-      REPO: MaterializeInc/metabase-materialize-driver
-      DOCKER: true
-
-  ocient:
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'master'
-      PARTNER_REF: 'master'
-      DRIVER: 'ocient'
-      REPO: Xeograph/metabase-ocient-driver
-      DOCKER: false
-
-  starburst:
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'master'
-      PARTNER_REF: 'main'
-      DRIVER: 'starburst'
-      REPO: starburstdata/metabase-driver
-      DOCKER: false
+      PARTNER_REF: ${{ matrix.driver.ref }}
+      DRIVER: ${{ matrix.driver.name }}
+      REPO: ${{ matrix.driver.repo }}
+      DOCKER: ${{ matrix.driver.docker }}
