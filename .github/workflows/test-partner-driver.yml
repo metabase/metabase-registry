@@ -4,6 +4,7 @@ on: push
 
 jobs:
   clickhouse-edge:
+    name: edge
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: 'master'
@@ -13,18 +14,17 @@ jobs:
       DOCKER: true
 
   clickhouse-current:
-    steps:
-      - name: current
-        description:
-        uses: ./.github/workflows/callable-partner-driver.yml
-        with:
-          MB_REF: 'release-x.${{ vars.CURRENT_VERSION }}.x'
-          PARTNER_REF: 'master'
-          DRIVER: 'clickhouse'
-          REPO: ClickHouse/metabase-clickhouse-driver
-          DOCKER: true
+    name: current
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: 'release-x.${{ vars.CURRENT_VERSION }}.x'
+      PARTNER_REF: 'master'
+      DRIVER: 'clickhouse'
+      REPO: ClickHouse/metabase-clickhouse-driver
+      DOCKER: true
 
   clickhouse-previous:
+    name: previous
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
       MB_REF: 'release-x.${{ vars.CURRENT_VERSION - 1 }}.x'
