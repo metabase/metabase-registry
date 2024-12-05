@@ -26,8 +26,8 @@ jobs:
           export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
           echo "value=[{\"ref\": \"master\", \"name\": \"edge\"}, {\"ref\": \"release-x.${CURRENT_VERSION}.x\", \"name\": \"current\"}, {\"ref\": \"release-x.$(($CURRENT_VERSION - 1)).x\", \"name\": \"previous\"}]" >> $GITHUB_OUTPUT
       - run: |
-          echo "versions ${{ steps.versions.outputs.value }}"
-          echo "drivers ${{ steps.drivers.outputs.value }}"
+          echo "versions ${{ fromJSON(steps.versions.outputs.value) }}"
+          echo "drivers ${{ fromJSON(steps.drivers.outputs.value) }}"
 
   driver:
     needs: [ setup ]
