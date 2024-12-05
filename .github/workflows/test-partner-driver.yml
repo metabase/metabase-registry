@@ -6,43 +6,41 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.matrix.outputs.value }}
+      versions: ${{ steps.versions.outputs.value }}
+      drivers: ${{ steps.drivers.outputs.value }}
     steps:
-      - id: matrix
+      - uses: actions/checkout@v4
+      - name: Install yq
+        run: sudo apt-get install -y yq
+      - id: drivers
         run: |
           export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
-          echo "value=[\"master\", \"release-x.${CURRENT_VERSION}.x\", \"release-x.$(($CURRENT_VERSION - 1)).x\"]" >> $GITHUB_OUTPUT
+          echo value=$(yq '.drivers | map({.name: {"repo": .test.repo\
+             , "edge": .test.refs.default\
+             , "current": (.test.refs | omit(["default"]) | to_entries| .[] | select((.key|tonumber) >= $CURRENT_VERSION) | .value)//.test.refs.default\
+             , "previous": (.test.refs | omit(["default"]) | to_entries| .[] | select((.key|tonumber) >= $(($CURRENT_VERSION - 1))) | .value)//.test.refs.default\
+             , "docker": .test.docker}})' -o json registry.yaml) >> $GITHUB_OUTPUT
+
+      - id: versions
+        run: |
+          export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
+          echo "value=[{\"ref\": \"master\", \"name\": \"edge\"}, {\"ref\": \"release-x.${CURRENT_VERSION}.x\", \"name\": \"current\"}, {\"ref\": \"release-x.$(($CURRENT_VERSION - 1)).x\", \"name\": \"previous\"}]" >> $GITHUB_OUTPUT
       - run: |
-          echo "${{ steps.matrix.outputs.value }}"
+          echo "versions ${{ steps.versions.outputs.value }}"
+          echo "drivers ${{ steps.drivers.outputs.value }}"
 
   driver:
     needs: [ setup ]
-    name: "${{ matrix.driver.name }} : ${{ matrix.value }} :: ${{ matrix.driver.ref }}"
+    name: "${{ matrix.driver.name }} : ${{ matrix.versions.name }}"
     strategy:
       matrix:
-        value: ${{fromJSON(needs.setup.outputs.matrix)}}
-        driver:
-          - name: clickhouse
-            repo: ClickHouse/metabase-clickhouse-driver
-            ref: master
-            docker: true
-          - name: materialize
-            repo: MaterializeInc/metabase-materialize-driver
-            ref: master
-            docker: true
-          - name: starburst
-            repo: starburstdata/metabase-driver
-            ref: main
-            docker: false
-          - name: ocient
-            repo: Xeograph/metabase-ocient-driver
-            ref: master
-            docker: false
+        version: ${{fromJSON(needs.setup.outputs.versions)}}
+        driver: ${{fromJSON(needs.setup.outputs.drivers)}}
       fail-fast: false
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
-      MB_REF: ${{ matrix.value }}
-      PARTNER_REF: ${{ matrix.driver.ref }}
+      MB_REF: ${{ matrix.version.ref }}
+      PARTNER_REF: ${{ matrix.driver[matrix.version.name] }}
       DRIVER: ${{ matrix.driver.name }}
       REPO: ${{ matrix.driver.repo }}
       DOCKER: ${{ matrix.driver.docker }}
