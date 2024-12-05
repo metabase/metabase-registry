@@ -13,18 +13,21 @@ jobs:
       DOCKER: true
 
   clickhouse-current:
-    uses: ./.github/workflows/callable-partner-driver.yml
-    with:
-      MB_REF: 'release-x.52.x'
-      PARTNER_REF: 'master'
-      DRIVER: 'clickhouse'
-      REPO: ClickHouse/metabase-clickhouse-driver
-      DOCKER: true
+    steps:
+      - name: current
+        description:
+        uses: ./.github/workflows/callable-partner-driver.yml
+        with:
+          MB_REF: 'release-x.${{ vars.CURRENT_VERSION }}.x'
+          PARTNER_REF: 'master'
+          DRIVER: 'clickhouse'
+          REPO: ClickHouse/metabase-clickhouse-driver
+          DOCKER: true
 
   clickhouse-previous:
     uses: ./.github/workflows/callable-partner-driver.yml
     with:
-      MB_REF: 'release-x.51.x'
+      MB_REF: 'release-x.${{ vars.CURRENT_VERSION - 1 }}.x'
       PARTNER_REF: 'master'
       DRIVER: 'clickhouse'
       REPO: ClickHouse/metabase-clickhouse-driver
