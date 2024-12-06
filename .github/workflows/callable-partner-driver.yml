@@ -96,6 +96,17 @@ jobs:
             -X:dev:drivers:drivers-dev:test:partner-driver \
             :only-tags [:mb/driver-tests]
 
+      - name: Build jar
+        run: |
+          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"partner-driver\" }}}" > modules/drivers/deps.edn
+          bin/build-driver.sh ${{ inputs.DRIVER }}
+
+      - name: Upload driver jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: driver-jar
+          path: metabase/resources/modules/${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
+
       - name: Publish Test Report
         uses: dorny/test-reporter@v1
         if: failure()
