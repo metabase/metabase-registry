@@ -119,12 +119,13 @@ jobs:
         run: |
           echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" }}}" > modules/drivers/deps.edn
           bin/build-driver.sh ${{ inputs.DRIVER }}
+          mv resources/modules/${{ inputs.DRIVER }}.metabase-driver.jar ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
 
       - name: Upload driver jar
         uses: actions/upload-artifact@v4
         with:
           name: driver-jar
-          path: metabase/resources/modules/${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
+          path: metabase/${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
 
       - name: Publish Test Report
         uses: dorny/test-reporter@v1
