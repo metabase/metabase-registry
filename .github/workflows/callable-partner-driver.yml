@@ -83,13 +83,14 @@ jobs:
       - name: Build static-viz
         run: yarn build-static-viz
 
+      - name: Setup docker
+        if: ${{ inputs.DOCKER }}
+        run: |
+          sudo echo "127.0.0.1 ${{ inputs.DRIVER }}" | sudo tee -a /etc/hosts
+          echo "MB_${{inputs.DRIVER}}_TEST_HOST=${{ inputs.DRIVER }}" >> "$GITHUB_ENV"
+
       - name: Run tests
         run: |
-
-          sudo echo "127.0.0.1 ${{ inputs.DRIVER }}" | sudo tee -a /etc/hosts
-
-          echo ${{ inputs.DOCKER }}
-
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
             -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/partner-driver/test\" \"modules/driver/partner-driver/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/partner-driver\"}}}}}" \
