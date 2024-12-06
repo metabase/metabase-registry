@@ -47,3 +47,4 @@ jobs:
       DRIVER: ${{ matrix.driver.name }}
       REPO: ${{ matrix.driver.repo }}
       DOCKER: ${{ matrix.driver.docker }}
+    secrets: inherit
