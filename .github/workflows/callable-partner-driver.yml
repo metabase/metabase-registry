@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.REPO }}
-          path: metabase/modules/drivers/partner-driver
+          path: metabase/modules/drivers/#{{ inputs.DRIVER }}
           ref: ${{ inputs.PARTNER_REF }}
 
       - name: Set up JDK 21
@@ -93,13 +93,13 @@ jobs:
         run: |
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
-            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/partner-driver/test\" \"modules/driver/partner-driver/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/partner-driver\"}}}}}" \
+            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\"}}}}}" \
             -X:dev:drivers:drivers-dev:test:partner-driver \
             :only-tags [:mb/driver-tests]
 
       - name: Build jar
         run: |
-          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"partner-driver\" }}}" > modules/drivers/deps.edn
+          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" }}}" > modules/drivers/deps.edn
           bin/build-driver.sh ${{ inputs.DRIVER }}
 
       - name: Upload driver jar
