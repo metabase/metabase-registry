@@ -97,14 +97,24 @@ jobs:
         run: |
           export DRIVER=${{ inputs.DRIVER }}
           export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          op item list --format=json --tags partner-testing |  jq -r ".[] | select(.title | test(\"driver: $DRIVER\")) | .id" |  xargs -I {} op item get {} --format=json --vault "Driver Development" |  jq -r ".fields[] | select(.section.label == \"ENV\") | \"MB_$(echo $DRIVER | tr '[:lower:]' '[:upper:]' | tr '-' '_')_TEST_\\(.label)=\\\"\\(.value)\\\"\"" >> $GITHUB_ENV
+
+          op item list --format=json --tags partner-testing \
+            |  jq -r ".[] | select(.title | test(\"driver: $DRIVER\")) | .id" \
+            |  xargs -I {} op item get {} --format=json --vault "Driver Development" \
+            |  jq -r ".fields[] | select(.section.label == \"ENV\") | .value" \
+            | xargs -I {} echo "::add-mask::{}"
+          op item list --format=json --tags partner-testing \
+            |  jq -r ".[] | select(.title | test(\"driver: $DRIVER\")) | .id" \
+            |  xargs -I {} op item get {} --format=json --vault "Driver Development" \
+            |  jq -r ".fields[] | select(.section.label == \"ENV\") | \"MB_$(echo $DRIVER | tr '[:lower:]' '[:upper:]' | tr '-' '_')_TEST_\\(.label)=\\\"\\(.value)\\\"\"" \
+            >> $GITHUB_ENV
 
       - name: Run tests
         run: |
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
             -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\"}}}}}" \
-            -X:dev:drivers:drivers-dev:test:partner-driver \
+            -X:dev:drivers:drivers-dev:ee:ee-dev:partner-driver \
             :only-tags [:mb/driver-tests]
 
       - name: Build jar
