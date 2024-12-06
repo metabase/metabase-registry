@@ -124,7 +124,7 @@ jobs:
       - name: Upload driver jar
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.DRIVER }}-${{ inputs.MB_REF }}-jar
+          name: ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
           path: metabase/${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
 
       - name: Publish Test Report
