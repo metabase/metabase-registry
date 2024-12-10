@@ -117,7 +117,7 @@ jobs:
           # Run tests
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
-            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER } ${DEPSARGS}}\"}}}}}" \
+            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }} ${DEPSARGS}}\"}}}}" \
             -X:dev:drivers:drivers-dev:ee:ee-dev:partner-driver:test \
             :only-tags [:mb/driver-tests]
 
