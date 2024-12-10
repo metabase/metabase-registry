@@ -2,8 +2,9 @@ name: Test All Partner Drivers
 
 on:
   schedule:
-    - cron: "0 * * * *"
-  push:
+    - cron: "0 10 * * *"
+  push: main
+  workflow_dispatch:
 
 jobs:
   setup:
@@ -11,13 +12,14 @@ jobs:
     outputs:
       versions: ${{ steps.versions.outputs.value }}
       drivers: ${{ steps.drivers.outputs.value }}
+    env:
+      CURRENT_VERSION: ${{ vars.CURRENT_VERSION }}
     steps:
       - uses: actions/checkout@v4
       - name: Install yq
         run: sudo snap install yq
       - id: drivers
         run: |
-          export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
           echo value=$(yq ".drivers | map({\"name\": .name, \"repo\": .test.repo\
              , \"edge\": .test.refs.default\
              , \"current\": (.test.refs | omit([\"default\"]) | to_entries| .[] | select((.key|tonumber) >= $CURRENT_VERSION) | .value)//.test.refs.default\
@@ -26,7 +28,6 @@ jobs:
 
       - id: versions
         run: |
-          export CURRENT_VERSION=${{ vars.CURRENT_VERSION }}
           echo "value=[{\"ref\": \"master\", \"name\": \"edge\"}, {\"ref\": \"release-x.${CURRENT_VERSION}.x\", \"name\": \"current\"}, {\"ref\": \"release-x.$(($CURRENT_VERSION - 1)).x\", \"name\": \"previous\"}]" >> $GITHUB_OUTPUT
       - run: |
           echo "versions ${{ fromJSON(steps.versions.outputs.value) }}"

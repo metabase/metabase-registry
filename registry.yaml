@@ -64,5 +64,6 @@ drivers:
     test:
       docker: true
       repo: starburstdata/metabase-driver
+      dir: drivers/starburst
       refs:
         default: main
