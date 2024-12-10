@@ -60,7 +60,7 @@ drivers:
   - name: starburst
     homepage: https://github.com/starburstdata/metabase-driver
     versions:
-      default: https://github.com/starburstdata/metabase-driver/releases/download/4.1.0/starburst-4.1.0.metabase-driver.jar
+      default: https://github.com/starburstdata/metabase-driver/releases/download/5.0.0/starburst-5.0.0.metabase-driver.jar
     test:
       docker: true
       repo: starburstdata/metabase-driver
