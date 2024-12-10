@@ -3,7 +3,9 @@ name: Test All Partner Drivers
 on:
   schedule:
     - cron: "0 10 * * *"
-  push: main
+  push:
+    branches:
+      - 'main'
   workflow_dispatch:
 
 jobs:
