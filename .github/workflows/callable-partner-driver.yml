@@ -117,13 +117,13 @@ jobs:
           # Run tests
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
-            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }} ${DEPSARGS}}\"}}}}" \
+            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\" ${DEPSARGS} }}}}}" \
             -X:dev:drivers:drivers-dev:ee:ee-dev:partner-driver:test \
             :only-tags [:mb/driver-tests]
 
       - name: Build jar
         run: |
-          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" }} ${DEPSARGS}}" > modules/drivers/deps.edn
+          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" ${DEPSARGS} }}}" > modules/drivers/deps.edn
           bin/build-driver.sh ${{ inputs.DRIVER }}
           mv resources/modules/${{ inputs.DRIVER }}.metabase-driver.jar ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
 
