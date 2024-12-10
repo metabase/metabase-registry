@@ -112,18 +112,22 @@ jobs:
           rm driver.env
 
           # Move source in subdir to modules
-          DEPSARGS=$( yq -r ".drivers[] | select(.name == \"${DRIVER}\") | .test.dir // \".\" | \" :deps/root \\\"\\(.)\\\"\"" ../registry/registry.yaml )
+          DIR=$( yq -r ".drivers[] | select(.name == \"${DRIVER}\") | .test.dir" ../registry/registry.yaml )
+          if [[ "$DIR" != "null" ]]; then
+            mv modules/drivers/${DRIVER} ../tmp-${DRIVER}
+            mv ../tmp-${DRIVER}/${DIR} modules/drivers/${DRIVER}
+          fi
 
           # Run tests
           DRIVERS=${{ inputs.DRIVER }} \
             clojure \
-            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\" ${DEPSARGS} }}}}}" \
+            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\"}}}}}" \
             -X:dev:drivers:drivers-dev:ee:ee-dev:partner-driver:test \
             :only-tags [:mb/driver-tests]
 
       - name: Build jar
         run: |
-          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" ${DEPSARGS} }}}" > modules/drivers/deps.edn
+          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" }}}" > modules/drivers/deps.edn
           bin/build-driver.sh ${{ inputs.DRIVER }}
           mv resources/modules/${{ inputs.DRIVER }}.metabase-driver.jar ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
 
