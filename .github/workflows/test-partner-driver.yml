@@ -1,0 +1,51 @@
+name: Test All Partner Drivers
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  push:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.versions.outputs.value }}
+      drivers: ${{ steps.drivers.outputs.value }}
+    env:
+      CURRENT_VERSION: ${{ vars.CURRENT_VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install yq
+        run: sudo snap install yq
+      - id: drivers
+        run: |
+          echo value=$(yq ".drivers | map({\"name\": .name, \"repo\": .test.repo\
+             , \"edge\": .test.refs.default\
+             , \"current\": (.test.refs | omit([\"default\"]) | to_entries| .[] | select((.key|tonumber) >= $CURRENT_VERSION) | .value)//.test.refs.default\
+             , \"previous\": (.test.refs | omit([\"default\"]) | to_entries| .[] | select((.key|tonumber) >= $(($CURRENT_VERSION - 1))) | .value)//.test.refs.default\
+             , \"docker\": .test.docker})" -o json registry.yaml) >> $GITHUB_OUTPUT
+
+      - id: versions
+        run: |
+          echo "value=[{\"ref\": \"master\", \"name\": \"edge\"}, {\"ref\": \"release-x.${CURRENT_VERSION}.x\", \"name\": \"current\"}, {\"ref\": \"release-x.$(($CURRENT_VERSION - 1)).x\", \"name\": \"previous\"}]" >> $GITHUB_OUTPUT
+      - run: |
+          echo "versions ${{ fromJSON(steps.versions.outputs.value) }}"
+          echo "drivers ${{ fromJSON(steps.drivers.outputs.value) }}"
+
+  driver:
+    needs: [ setup ]
+    name: "${{ matrix.driver.name }} : ${{ matrix.version.name }} "
+    strategy:
+      matrix:
+        driver: ${{fromJSON(needs.setup.outputs.drivers)}}
+        version: ${{fromJSON(needs.setup.outputs.versions)}}
+      fail-fast: false
+    uses: ./.github/workflows/callable-partner-driver.yml
+    with:
+      MB_REF: ${{ matrix.version.ref }}
+      PARTNER_REF: ${{ matrix.driver[matrix.version.name] }}
+      DRIVER: ${{ matrix.driver.name }}
+      REPO: ${{ matrix.driver.repo }}
+      DOCKER: ${{ matrix.driver.docker }}
+    secrets: inherit

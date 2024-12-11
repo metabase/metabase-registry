@@ -1,0 +1,150 @@
+name: Test Partner Driver
+
+on:
+  workflow_call:
+    inputs:
+      DRIVER:
+        description: 'Driver to use'
+        type: string
+        required: true
+      MB_REF:
+        type: string
+        required: true
+      PARTNER_REF:
+        type: string
+        required: true
+      REPO:
+        type: string
+        required: true
+      DOCKER:
+        type: boolean
+        required: true
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN:
+        required: true
+
+jobs:
+  run-tests:
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./metabase
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: registry
+
+      - name: Checkout Metabase Repo
+        uses: actions/checkout@v4
+        with:
+          path: metabase
+          repository: metabase/metabase
+          ref: ${{ inputs.MB_REF }}
+
+      - name: Checkout Driver Repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.REPO }}
+          path: metabase/modules/drivers/${{ inputs.DRIVER }}
+          ref: ${{ inputs.PARTNER_REF }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Start Database in Docker
+        if: ${{ inputs.DOCKER }}
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: "./registry/docker-compose.yml"
+          services: |
+            ${{ inputs.DRIVER }}
+
+      - name: Install Clojure CLI
+        run: |
+          curl -O https://download.clojure.org/install/linux-install-1.11.1.1262.sh &&
+          sudo bash ./linux-install-1.11.1.1262.sh
+
+      - uses: 1password/install-cli-action@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+          cache: "yarn"
+          cache-dependency-path: ./metabase/yarn.lock
+
+      - name: Get M2 cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            ~/.gitlibs
+          key: ${{ runner.os }}-partner-driver-${{ hashFiles('**/deps.edn') }}
+
+      - name: Build static-viz
+        run: yarn build-static-viz
+
+      - name: Setup docker
+        if: ${{ inputs.DOCKER }}
+        run: |
+          sudo echo "127.0.0.1 ${{ inputs.DRIVER }}" | sudo tee -a /etc/hosts
+
+      - name: Run tests
+        run: |
+
+          export DRIVER=${{ inputs.DRIVER }}
+
+          # Setup environment
+          export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          op item list --format=json --tags partner-testing \
+            |  jq -r ".[] | select(.title | test(\"driver: $DRIVER\")) | .id" \
+            |  xargs -I {} op item get {} --format=json --vault "Driver Development" \
+            |  jq -r ".fields[] | select(.section.label == \"ENV\") | \"MB_$(echo $DRIVER | tr '[:lower:]' '[:upper:]' | tr '-' '_')_TEST_\\(.label)=\\\"\\(.value)\\\"\"" \
+            > driver.env
+
+          set -a
+          source driver.env
+          set +a
+          rm driver.env
+
+          # Move source in subdir to modules
+          DIR=$( yq -r ".drivers[] | select(.name == \"${DRIVER}\") | .test.dir" ../registry/registry.yaml )
+          if [[ "$DIR" != "null" ]]; then
+            mv modules/drivers/${DRIVER} ../tmp-${DRIVER}
+            mv ../tmp-${DRIVER}/${DIR} modules/drivers/${DRIVER}
+          fi
+
+          # Run tests
+          DRIVERS=${{ inputs.DRIVER }} \
+            clojure \
+            -Sdeps "{:jvm-opts [\"-Dci=true\"] :aliases {:partner-driver {:extra-paths [\"modules/drivers/${{ inputs.DRIVER }}/test\" \"modules/driver/${{ inputs.DRIVER }}/src\"] :extra-deps {metabase/partner-driver {:local/root \"modules/drivers/${{ inputs.DRIVER }}\"}}}}}" \
+            -X:dev:drivers:drivers-dev:ee:ee-dev:partner-driver:test \
+            :only-tags [:mb/driver-tests]
+
+      - name: Build jar
+        run: |
+          echo "{:deps {metabase/${{ inputs.DRIVER }} {:local/root \"${{ inputs.DRIVER }}\" }}}" > modules/drivers/deps.edn
+          bin/build-driver.sh ${{ inputs.DRIVER }}
+          mv resources/modules/${{ inputs.DRIVER }}.metabase-driver.jar ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
+
+      - name: Upload driver jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
+          path: metabase/${{ inputs.DRIVER }}.${{ inputs.MB_REF }}.metabase-driver.jar
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: failure()
+        with:
+          path: "target/junit/**/*_test.xml"
+          name: JUnit Test Report ${{ inputs.DRIVER }}
+          working-directory: metabase
+          reporter: java-junit
+          list-suites: failed
+          list-tests: failed
+          fail-on-error: false

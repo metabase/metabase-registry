@@ -4,30 +4,66 @@ drivers:
     versions:
       default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.50.6/clickhouse.metabase-driver.jar
       49: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.5.1/clickhouse.metabase-driver.jar
+    test:
+      docker: true
+      repo: ClickHouse/metabase-clickhouse-driver
+      refs:
+        default: master
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
     versions:
       default: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/0.2.9/duckdb.metabase-driver.jar
       49: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/0.2.7/duckdb.metabase-driver.jar
+    test:
+      docker: false
+      repo: MotherDuck-Open-Source/metabase_duckdb_driver
+      refs:
+        default: main
   - name: exasol
     homepage: https://github.com/exasol/metabase-driver
     versions:
       default: https://github.com/exasol/metabase-driver/releases/download/1.0.7/exasol.metabase-driver.jar
     deps:
       - https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.20/exasol-jdbc-7.1.20.jar # what about 24.1.1?
+    test:
+      docker: true
+      repo: exasol/metabase-driver
+      refs:
+        default: main
   - name: firebolt
     homepage: https://docs.firebolt.io/integrations/business-intelligence/connecting-to-metabase.html
     versions:
       default: https://github.com/firebolt-db/metabase-firebolt-driver/releases/download/3.0.3/firebolt.metabase-driver-3.0.3.jar
+    test:
+      docker: false
+      repo: firebolt-db/metabase-firebolt-driver
+      refs:
+        default: develop
   - name: materialize
     homepage: https://github.com/MaterializeInc/metabase-materialize-driver
     versions:
       default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.0/materialize.metabase-driver.jar
+    test:
+      docker: true
+      repo: MaterializeInc/metabase-materialize-driver
+      refs:
+        default: master
   - name: ocient
     homepage: https://github.com/Xeograph/metabase-ocient-driver
     versions:
       default: https://github.com/Xeograph/metabase-ocient-driver/releases/download/v1.1.0/ocient.metabase-driver.jar
+    test:
+      docker: false
+      repo: Xeograph/metabase-ocient-driver
+      refs:
+        default: master
   - name: starburst
     homepage: https://github.com/starburstdata/metabase-driver
     versions:
       default: https://github.com/starburstdata/metabase-driver/releases/download/5.0.0/starburst-5.0.0.metabase-driver.jar
+    test:
+      docker: true
+      repo: starburstdata/metabase-driver
+      dir: drivers/starburst
+      refs:
+        default: main
