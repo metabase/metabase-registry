@@ -103,7 +103,7 @@ jobs:
           op item list --format=json --tags partner-testing \
             |  jq -r ".[] | select(.title | test(\"driver: $DRIVER\")) | .id" \
             |  xargs -I {} op item get {} --format=json --vault "Driver Development" \
-            |  jq -r ".fields[] | select(.section.label == \"ENV\") | \"MB_$(echo $DRIVER | tr '[:lower:]' '[:upper:]' | tr '-' '_')_TEST_\\(.label)=\\\"\\(.value)\\\"\"" \
+            |  jq -r ".fields[] | select(.section.label == \"ENV\") | \"MB_$(echo $DRIVER | tr '[:lower:]' '[:upper:]' | tr '-' '_')_TEST_\\(.label)=\\\"\\(.value // \"\")\\\"\"" \
             > driver.env
 
           set -a
