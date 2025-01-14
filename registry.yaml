@@ -2,7 +2,7 @@ drivers:
   - name: clickhouse
     homepage: https://github.com/ClickHouse/metabase-clickhouse-driver
     versions:
-      default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.50.6/clickhouse.metabase-driver.jar
+      default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.51.0/clickhouse.metabase-driver.jar
       49: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.5.1/clickhouse.metabase-driver.jar
     test:
       docker: true
