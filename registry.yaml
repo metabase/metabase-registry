@@ -42,7 +42,8 @@ drivers:
   - name: materialize
     homepage: https://github.com/MaterializeInc/metabase-materialize-driver
     versions:
-      default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.0/materialize.metabase-driver.jar
+      default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.3.0/materialize.metabase-driver.jar
+      50: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.1/materialize.metabase-driver.jar
     test:
       docker: true
       repo: MaterializeInc/metabase-materialize-driver
