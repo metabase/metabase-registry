@@ -9,6 +9,7 @@ drivers:
       repo: ClickHouse/metabase-clickhouse-driver
       refs:
         default: master
+        52: 1.51.0
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
     versions:
@@ -33,12 +34,13 @@ drivers:
   - name: firebolt
     homepage: https://docs.firebolt.io/integrations/business-intelligence/connecting-to-metabase.html
     versions:
-      default: https://github.com/firebolt-db/metabase-firebolt-driver/releases/download/v3.2.0/firebolt.metabase-driver-3.2.0.jar
+      default: https://github.com/firebolt-db/metabase-firebolt-driver/releases/download/v3.2.2/firebolt.metabase-driver-3.2.2.jar
     test:
       docker: false
       repo: firebolt-db/metabase-firebolt-driver
       refs:
         default: develop
+        52: v3.2.2
   - name: materialize
     homepage: https://github.com/MaterializeInc/metabase-materialize-driver
     versions:
@@ -48,7 +50,7 @@ drivers:
       docker: true
       repo: MaterializeInc/metabase-materialize-driver
       refs:
-        default: master
+        default: v1.4.0
   - name: ocient
     homepage: https://github.com/Xeograph/metabase-ocient-driver
     versions:
@@ -61,10 +63,11 @@ drivers:
   - name: starburst
     homepage: https://github.com/starburstdata/metabase-driver
     versions:
-      default: https://github.com/starburstdata/metabase-driver/releases/download/5.0.0/starburst-5.0.0.metabase-driver.jar
+      default: https://github.com/starburstdata/metabase-driver/releases/download/6.0.0/starburst-6.0.0.metabase-driver.jar
     test:
       docker: true
       repo: starburstdata/metabase-driver
       dir: drivers/starburst
       refs:
         default: main
+        52: release/6.0.0
