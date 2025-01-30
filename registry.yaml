@@ -20,17 +20,6 @@ drivers:
       repo: MotherDuck-Open-Source/metabase_duckdb_driver
       refs:
         default: main
-  - name: exasol
-    homepage: https://github.com/exasol/metabase-driver
-    versions:
-      default: https://github.com/exasol/metabase-driver/releases/download/1.0.7/exasol.metabase-driver.jar
-    deps:
-      - https://repo1.maven.org/maven2/com/exasol/exasol-jdbc/7.1.20/exasol-jdbc-7.1.20.jar # what about 24.1.1?
-    test:
-      docker: true
-      repo: exasol/metabase-driver
-      refs:
-        default: main
   - name: firebolt
     homepage: https://docs.firebolt.io/integrations/business-intelligence/connecting-to-metabase.html
     versions:
@@ -51,15 +40,6 @@ drivers:
       repo: MaterializeInc/metabase-materialize-driver
       refs:
         default: v1.4.0
-  - name: ocient
-    homepage: https://github.com/Xeograph/metabase-ocient-driver
-    versions:
-      default: https://github.com/Xeograph/metabase-ocient-driver/releases/download/v1.1.0/ocient.metabase-driver.jar
-    test:
-      docker: false
-      repo: Xeograph/metabase-ocient-driver
-      refs:
-        default: master
   - name: starburst
     homepage: https://github.com/starburstdata/metabase-driver
     versions:
