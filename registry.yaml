@@ -2,13 +2,16 @@ drivers:
   - name: clickhouse
     homepage: https://github.com/ClickHouse/metabase-clickhouse-driver
     versions:
-      default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.51.0/clickhouse.metabase-driver.jar
+      default: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.53.0/clickhouse.metabase-driver.jar
+      53: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.53.0/clickhouse.metabase-driver.jar
+      52: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.51.0/clickhouse.metabase-driver.jar
       49: https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/1.5.1/clickhouse.metabase-driver.jar
     test:
       docker: true
       repo: ClickHouse/metabase-clickhouse-driver
       refs:
         default: master
+        53: 1.53.0
         52: 1.51.0
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
