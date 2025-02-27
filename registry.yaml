@@ -21,16 +21,6 @@ drivers:
       repo: MotherDuck-Open-Source/metabase_duckdb_driver
       refs:
         default: main
-  - name: materialize
-    homepage: https://github.com/MaterializeInc/metabase-materialize-driver
-    versions:
-      default: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.4.0/materialize.metabase-driver.jar
-      50: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.1/materialize.metabase-driver.jar
-    test:
-      docker: true
-      repo: MaterializeInc/metabase-materialize-driver
-      refs:
-        default: v1.4.0
   - name: starburst
     homepage: https://github.com/starburstdata/metabase-driver
     versions:
