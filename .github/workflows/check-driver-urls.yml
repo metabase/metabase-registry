@@ -36,10 +36,13 @@ jobs:
             const driverDeps = driver.deps;
 
             for (const versionName of Object.keys(driver.versions)) {
-              urls.push({
-                description: `${driverName}-${versionName}`,
-                url: driver.versions[versionName],
-              });
+
+              if (driver.versions[versionName] != 'noop') {
+                urls.push({
+                  description: `${driverName}-${versionName}`,
+                  url: driver.versions[versionName],
+                });
+              }
             }
 
             if (driverDeps) {
