@@ -28,7 +28,7 @@ drivers:
     homepage: https://docs.firebolt.io/integrations/business-intelligence/connecting-to-metabase.html
     versions:
       default: noop
-      53: https://github.com/firebolt-db/metabase-firebolt-driver/releases/download/v3.2.2/firebolt.metabase-driver-3.2.2.jar
+      53: noop
       52: https://github.com/firebolt-db/metabase-firebolt-driver/releases/download/v3.2.2/firebolt.metabase-driver-3.2.2.jar
     test:
       docker: false
@@ -40,7 +40,7 @@ drivers:
     homepage: https://github.com/MaterializeInc/metabase-materialize-driver
     versions:
       default: noop
-      53: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.4.0/materialize.metabase-driver.jar
+      53: noop
       52: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.4.0/materialize.metabase-driver.jar
       50: https://github.com/MaterializeInc/metabase-materialize-driver/releases/download/v1.2.1/materialize.metabase-driver.jar
     test:
