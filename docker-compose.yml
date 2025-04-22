@@ -2,26 +2,6 @@
 version: "3.9"
 
 services:
-  materialize:
-    image: materialize/materialized:latest
-    container_name: materialize
-    command:
-      - --availability-zone=test1
-      - --availability-zone=test2
-      - --bootstrap-role=materialize
-      - --system-parameter-default=max_tables=1000
-    environment:
-      MZ_NO_TELEMETRY: 1
-    ports:
-      - 6875:6875
-      - 6877:6877
-      - 6878:6878
-    healthcheck:
-      {
-        test: curl -f localhost:6878/api/readyz,
-        interval: 1s,
-        start_period: 35s,
-      }
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     environment:
@@ -29,13 +9,3 @@ services:
     ports:
       - 8123:8123
       - 9000:9000
-  exasol:
-    image: exasol/docker-db:7.1.23
-    ports:
-      - 8563:8563
-      - 2580:2580
-      - 443:443
-  starburst:
-    image: trinodb/trino:latest
-    ports:
-      - 8082:8080
