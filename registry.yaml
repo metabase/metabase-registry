@@ -12,6 +12,7 @@ drivers:
       refs:
         default: master
         52: 1.51.0
+        53: 1.53.3
   - name: duckdb
     homepage: https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver
     versions:
